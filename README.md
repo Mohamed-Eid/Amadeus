@@ -1,3 +1,3 @@
-# Twitter
+# Amadeus
 
-Twitter Interface for Laravel
+Amadeus Interface for Laravel
