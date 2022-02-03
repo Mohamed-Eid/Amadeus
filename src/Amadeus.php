@@ -15,7 +15,6 @@ class Amadeus
     protected string $clientId;
     protected string $clientSecret;
     protected string $accessToken;
-    public string $version;
     public int $expiresIn;
 
     public array $headers;
@@ -24,18 +23,16 @@ class Amadeus
     public function __construct(
         string $clientId,
         string $clientSecret,
-        string $version = 'v2',
         bool   $test = true
     ) {
         $this->clientId = $clientId;
         $this->clientSecret = $clientSecret;
-        $this->version = $version;
         $this->accessToken = '';
         $this->expiresIn = 0;
         if ($test) {
-            $this->url = "https://test.api.amadeus.com/{$this->version}";
+            $this->url = "https://test.api.amadeus.com";
         } else {
-            $this->url = "https://test.api.amadeus.com/{$this->version}";
+            $this->url = "https://test.api.amadeus.com";
         }
 
         $this->headers = [];
@@ -88,7 +85,7 @@ class Amadeus
 
     public function getTokenInfo()
     {
-        $res = $this->client->get("{$this->version}/security/oauth2/token/{$this->accessToken}");
+        $res = $this->client->get("v2/security/oauth2/token/{$this->accessToken}");
         return json_decode($res->getBody());
     }
 
@@ -112,7 +109,7 @@ class Amadeus
      */
     public function flightOffers($params)
     {
-        $res = $this->client->get("{$this->version}/shopping/flight-offers", [
+        $res = $this->client->get("v2/shopping/flight-offers", [
             'query' => $params
         ]);
         return json_decode($res->getBody());
