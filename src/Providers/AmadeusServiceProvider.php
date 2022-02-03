@@ -1,10 +1,10 @@
 <?php
 
-namespace Bluex\Twitter\Providers;
+namespace Bluex\Amadeus\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
-class TwitterServiceProvider extends ServiceProvider
+class AmadeusServiceProvider extends ServiceProvider
 {
 
     /**
