@@ -115,11 +115,25 @@ class Amadeus
         return json_decode($res->getBody());
     }
 
-    public function getLocations($keyword, $subType='CITY,AIRPORT'){
+    public function getLocations($keyword, $subType = 'CITY,AIRPORT')
+    {
         $res = $this->client->get("v1/reference-data/locations", [
             'query' => [
                 'keyword' => $keyword,
                 'subType' => $subType
+            ]
+        ]);
+        return json_decode($res->getBody());
+    }
+
+    public function hotels($cityCode, $checkInDate, $checkOutDate = null)
+    {
+        return $this->accessToken;
+        $res = $this->client->get("v2/shopping/hotel-offers", [
+            'query' => [
+                'cityCode' => $cityCode,
+                'checkInDate' => $checkInDate,
+                'checkOutDate' => $checkOutDate
             ]
         ]);
         return json_decode($res->getBody());
