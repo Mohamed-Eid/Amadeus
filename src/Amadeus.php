@@ -2,6 +2,7 @@
 
 namespace Bluex\Amadeus;
 
+use Bluex\Amadeus\Models\Search\Hotel;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\CurlHandler;
 use GuzzleHttp\HandlerStack;
@@ -115,6 +116,60 @@ class Amadeus
         return json_decode($res->getBody());
     }
 
+    public function advancedFlightOffers($params)
+    {
+        $res = $this->client->post("v2/shopping/flight-offers", [
+            'json' => $params
+        ]);
+        return json_decode($res->getBody());
+    }
+
+    public function flightOfferPrice($offer)
+    {
+        $res = $this->client->post("v1/shopping/flight-offers/pricing", [
+            'json' => [
+                'data' => [
+                    'type' => 'flight-offers-pricing',
+                    'flightOffers' => [$offer]
+                ]
+            ]
+        ]);
+
+        $res  = json_decode($res->getBody());
+
+        return $res;
+    }
+
+    public function flightOrder($flightOffer, $travelers, $remarks, $ticketingAgreement, $contacts)
+    {
+        // dd([
+        //     'data' => [
+        //         'type'                 => 'flight-order',
+        //         'flightOffers'         => [$flightOffer],
+        //         'travelers'            => $travelers,
+        //         'remarks'              => $remarks,
+        //         'ticketingAgreement'   => $ticketingAgreement,
+        //         'contacts'             => $contacts,
+        //     ]
+        // ]);
+        $res = $this->client->post("v1/shopping/flight-offers/pricing", [
+            'json' => [
+                'data' => [
+                    'type'                 => 'flight-order',
+                    'flightOffers'         => [$flightOffer],
+                    'travelers'            => $travelers,
+                    'remarks'              => $remarks,
+                    'ticketingAgreement'   => $ticketingAgreement,
+                    'contacts'             => $contacts,
+                ]
+            ]
+        ]);
+
+        $res  = json_decode($res->getBody());
+
+        return $res;
+    }
+
     public function getLocations($keyword, $subType = 'CITY,AIRPORT')
     {
         $res = $this->client->get("v1/reference-data/locations", [
@@ -126,16 +181,50 @@ class Amadeus
         return json_decode($res->getBody());
     }
 
-    public function hotels($cityCode, $checkInDate, $checkOutDate = null)
+    public function getHotelNames($keyword, $subType = 'HOTEL_LEISURE')
     {
-        return $this->accessToken;
-        $res = $this->client->get("v2/shopping/hotel-offers", [
+        $res = $this->client->get("v1/reference-data/locations/hotel", [
             'query' => [
-                'cityCode' => $cityCode,
-                'checkInDate' => $checkInDate,
-                'checkOutDate' => $checkOutDate
+                'keyword' => $keyword,
+                'subType' => $subType
             ]
         ]);
         return json_decode($res->getBody());
+    }
+
+    public function hotels(Hotel $hotel)
+    {
+        $data = $hotel->getData();
+        $res = $this->client->get("v2/shopping/hotel-offers", [
+            'query' => $data
+        ]);
+        return json_decode($res->getBody());
+    }
+
+    public function getHotel(string $hotelId)
+    {
+        $res = $this->client->get("v2/shopping/hotel-offers/by-hotel", [
+            'query' => [
+                'hotelId' => $hotelId
+            ]
+        ]);
+        return json_decode($res->getBody());
+    }
+    
+    public function bookHotel($offerId, $guests, $payments)
+    {
+        $res = $this->client->post("v1/booking/hotel-bookings", [
+            'json' => [
+                'data' => [
+                    'offerId'   => $offerId,
+                    'guests'    => $guests,
+                    'payments'  => $payments,
+                ]
+            ]
+        ]);
+
+        $res  = json_decode($res->getBody());
+
+        return $res;
     }
 }
