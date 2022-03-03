@@ -211,6 +211,16 @@ class Amadeus
         return json_decode($res->getBody());
     }
     
+    public function getHotelReputation(string $hotelIds)
+    {
+        $res = $this->client->get("v2/e-reputation/hotel-sentiments", [
+            'query' => [
+                'hotelIds' => $hotelIds
+            ]
+        ]);
+        return json_decode($res->getBody());
+    }
+    
     public function bookHotel($offerId, $guests, $payments)
     {
         $res = $this->client->post("v1/booking/hotel-bookings", [
