@@ -29,9 +29,9 @@ class Hotel implements SearchContract
 
     public function getData(): array
     {
-        if (!isset($this->data['cityCode'])) {
-            throw new Exception("cityCode is required param", 1);
-        }
+        // if (!isset($this->data['cityCode'])) {
+        //     throw new Exception("cityCode is required param", 1);
+        // }
         return $this->data;
     }
 
