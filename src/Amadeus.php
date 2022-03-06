@@ -210,7 +210,7 @@ class Amadeus
         ]);
         return json_decode($res->getBody());
     }
-    
+
     public function getHotelReputation(string $hotelIds)
     {
         $res = $this->client->get("v2/e-reputation/hotel-sentiments", [
@@ -220,7 +220,14 @@ class Amadeus
         ]);
         return json_decode($res->getBody());
     }
-    
+
+    public function getHotelOffer(string $offerId)
+    {
+        // dd("v2/shopping/hotel-offers/$offerId");
+        $res = $this->client->get("v2/shopping/hotel-offers/$offerId");
+        return json_decode($res->getBody());
+    }
+
     public function bookHotel($offerId, $guests, $payments)
     {
         $res = $this->client->post("v1/booking/hotel-bookings", [
