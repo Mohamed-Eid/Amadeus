@@ -152,7 +152,7 @@ class Amadeus
         //         'contacts'             => $contacts,
         //     ]
         // ]);
-        $res = $this->client->post("v1/shopping/flight-offers/pricing", [
+        $res = $this->client->post("v1/booking/flight-orders", [
             'json' => [
                 'data' => [
                     'type'                 => 'flight-order',
