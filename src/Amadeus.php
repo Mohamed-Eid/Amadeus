@@ -2,6 +2,7 @@
 
 namespace Bluex\Amadeus;
 
+use Bluex\Amadeus\Exceptions\AmadeusException;
 use Bluex\Amadeus\Models\Search\Hotel;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\CurlHandler;
@@ -142,16 +143,6 @@ class Amadeus
 
     public function flightOrder($flightOffer, $travelers, $remarks, $ticketingAgreement, $contacts)
     {
-        // dd([
-        //     'data' => [
-        //         'type'                 => 'flight-order',
-        //         'flightOffers'         => [$flightOffer],
-        //         'travelers'            => $travelers,
-        //         'remarks'              => $remarks,
-        //         'ticketingAgreement'   => $ticketingAgreement,
-        //         'contacts'             => $contacts,
-        //     ]
-        // ]);
         $res = $this->client->post("v1/booking/flight-orders", [
             'json' => [
                 'data' => [
@@ -167,6 +158,10 @@ class Amadeus
 
         $res  = json_decode($res->getBody());
 
+        if (property_exists($res, 'errors')) {
+            throw new AmadeusException($res->errors[0]->title ." : ".$res->errors[0]->detail );
+        }
+        
         return $res;
     }
 

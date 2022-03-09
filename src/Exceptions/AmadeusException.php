@@ -2,6 +2,6 @@
 
 namespace Bluex\Amadeus\Exceptions;
 
-class Exception extends Exception
+class AmadeusException extends \Exception
 {
 }
